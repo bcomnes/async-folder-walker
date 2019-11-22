@@ -1,7 +1,7 @@
 {
   "name": "async-folder-walker",
   "description": "WIP - nothing to see here",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "main": "index.js",
   "module": "main.js",
   "author": "Bret Comnes <bcomnes@gmail.com> (https://bret.io)",
