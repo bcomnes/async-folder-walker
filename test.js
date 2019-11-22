@@ -56,17 +56,39 @@ test('When you just pass a file', async t => {
 });
 
 test('pathFilter works', async t => {
-  t.fail();
+  const filterStrig = 'sub-folder';
+  const files = await allFiles(fixtures, {
+    pathFilter: p => !p.includes(filterStrig)
+  });
+
+  t.false(files.some(f => f.includes(filterStrig)), 'No paths include the excluded string');
 });
 
 test('statFilter works', async t => {
-  t.fail();
+  const stats = await allFiles(fixtures, {
+    statFilter: st => !st.isDirectory(), // Exclude files
+    shaper: ({ root, filepath, stat, relname, basename }) => stat // Lets get the stats instead of paths
+  });
+
+  for (const st of stats) {
+    t.false(st.isDirectory(), 'none of the files are directories');
+  }
 });
 
-test('dont include root directory in response', function (t) {
-
+test('dont include root directory in response', async (t) => {
+  const root = process.cwd();
+  for await (const file of asyncFolderWalker(root)) {
+    if (file === root) t.fail('root directory should not be in results');
+  }
+  t.pass('The root was not included in results.');
 });
 
-test('dont walk past the maxDepth', function (t) {
-
+test('dont walk past the maxDepth', async t => {
+  const maxDepth = 3;
+  const walker = asyncFolderWalker(['.git', 'node_modules'], { maxDepth });
+  for await (const file of walker) {
+    const correctLength = file.split(path.sep).length - process.cwd().split(path.sep).length <= maxDepth;
+    if (!correctLength) t.fail('walker walked past the depth it was supposed to');
+  }
+  t.pass('Walker was depth limited');
 });
