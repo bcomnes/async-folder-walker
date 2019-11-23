@@ -4,6 +4,8 @@
 
 A recursive async iterator of the files and directories in a given folder. Can take multiple folders, limit walk depth and filter based on path names and stat results.
 
+![](https://repository-images.githubusercontent.com/223294839/43cf9600-0d3f-11ea-858e-81b08a14509f)
+
 ```
 npm install async-folder-walker
 ```
