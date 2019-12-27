@@ -12,28 +12,28 @@ npm install async-folder-walker
 ## Usage
 
 ``` js
-const { asyncFolderWalker, allFiles } = require('async-folder-walker');
+const { asyncFolderWalker, allFiles } = require('async-folder-walker')
 
 async function iterateFiles () {
-  const walker = asyncFolderWalker(['.git', 'node_modules']);
+  const walker = asyncFolderWalker(['.git', 'node_modules'])
   for await (const file of walker) {
-    console.log(file); // logs the file path!
+    console.log(file) // logs the file path!
   }
 }
 
 async function getAllFiles () {
-  const allFilepaths = await allFiles(['.git', 'node_modules']);
-  console.log(allFilepaths);
+  const allFilepaths = await allFiles(['.git', 'node_modules'])
+  console.log(allFilepaths)
 }
 
-iterateFiles().then(() => getAllFiles());
+iterateFiles().then(() => getAllFiles())
 ```
 
 ## API
 
-### `import { asyncFolderWalker } from 'async-folder-walker'`
+### `const { asyncFolderWalker, allFiles } = require('async-folder-walker')`
 
-Import `asyncFolderWalker`.
+Import `asyncFolderWalker` or `allFiles`.
 
 ### `async-gen = asyncFolderWalker(paths, [opts])`
 
