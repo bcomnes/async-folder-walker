@@ -12,9 +12,8 @@
     "dependency-check": "^4.1.0",
     "npm-run-all": "^4.1.5",
     "p-temporary-directory": "^1.1.1",
-    "semistandard": "^14.2.0",
-    "tape": "^4.11.0",
-    "tape-promise": "^4.0.0"
+    "standard": "^14.3.1",
+    "tap": "^14.10.5"
   },
   "homepage": "https://github.com/bcomnes/async-folder-walker",
   "keywords": [],
@@ -26,11 +25,11 @@
   "scripts": {
     "test": "run-s test:*",
     "test:deps": "dependency-check . --no-dev --no-peer",
-    "test:semistandard": "semistandard",
-    "test:tape": "tape test.js",
+    "test:standard": "standard",
+    "test:tap": "tap",
     "debug": "node --nolazy --inspect-brk=9229 -r esm test.js"
   },
-  "semistandard": {
+  "standard": {
     "ignore": [
       "dist"
     ]
