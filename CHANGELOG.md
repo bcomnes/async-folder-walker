@@ -5,6 +5,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+## 2.0.0 - 2019-12-26
+
+* Remove ESM support. Fuggit. It simply offers zero benafits in a node env.
+
 ## 1.0.0 - 2019-11-11
 
 * Initial release.
