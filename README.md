@@ -89,6 +89,39 @@ The `shaper` function lets you change the shape of the returned value based on d
 }
 ````
 
+Example of a fwData object:
+
+```js
+{
+  root: '/Users/bret/repos/async-folder-walker/fixtures',
+  filepath: '/Users/bret/repos/async-folder-walker/fixtures/sub-folder/sub-sub-folder',
+  stat: Stats {
+    dev: 16777220,
+    mode: 16877,
+    nlink: 3,
+    uid: 501,
+    gid: 20,
+    rdev: 0,
+    blksize: 4096,
+    ino: 30244023,
+    size: 96,
+    blocks: 0,
+    atimeMs: 1574381262779.8396,
+    mtimeMs: 1574380914743.5474,
+    ctimeMs: 1574380914743.5474,
+    birthtimeMs: 1574380905232.5996,
+    atime: 2019-11-22T00:07:42.780Z,
+    mtime: 2019-11-22T00:01:54.744Z,
+    ctime: 2019-11-22T00:01:54.744Z,
+    birthtime: 2019-11-22T00:01:45.233Z
+  },
+  relname: 'sub-folder/sub-sub-folder',
+  basename: 'sub-sub-folder'
+}
+```
+
+The `stat` property is an instance of [fs.Stats](https://nodejs.org/api/fs.html#fs_class_fs_stats) so it has extra methods not listed here.
+
 ### `files = await allFiles(paths, [opts])`
 
 Get an Array of all files inside of a directory.  `paths` can be a single string path or an array of string paths.

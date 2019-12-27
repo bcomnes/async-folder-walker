@@ -22,6 +22,16 @@ tap.test('Array from async iterator', async t => {
   t.equal(files.length, 4, 'expected number of files are found')
 })
 
+tap.skip('Shape example', async t => {
+  await allFiles([fixtures], {
+    shaper: fwData => {
+      console.log(fwData)
+      return fwData
+    }
+  })
+  t.pass('shape printed')
+})
+
 tap.test('No args', async t => {
   for await (const file of asyncFolderWalker()) {
     t.fail(file, 'no files should be found!')
