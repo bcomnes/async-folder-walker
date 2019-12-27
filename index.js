@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require('fs')
+const path = require('path')
 
-const { readdir, lstat } = fs.promises;
+const { readdir, lstat } = fs.promises
 
 /**
  * pathFilter lets you filter files based on a resolved `filepath`.
@@ -10,7 +10,7 @@ const { readdir, lstat } = fs.promises;
  *
  * @return {Boolean} Return false to filter the given `filepath` and true to include it.
  */
-const pathFilter = filepath => true;
+const pathFilter = filepath => true
 
 /**
  * statFilter lets you filter files based on a lstat object.
@@ -19,7 +19,7 @@ const pathFilter = filepath => true;
  *
  * @return {Boolean} Return false to filter the given `filepath` and true to include it.
  */
-const statFilter = filepath => true;
+const statFilter = filepath => true
 
 /**
  * FWStats is the object that the okdistribute/folder-walker module returns by default.
@@ -39,7 +39,7 @@ const statFilter = filepath => true;
  *
  * @return {*} - Whatever you want returned from the directory walk.
  */
-const shaper = ({ root, filepath, stat, relname, basename }) => filepath;
+const shaper = ({ root, filepath, stat, relname, basename }) => filepath
 
 /**
  * Options object
@@ -70,33 +70,33 @@ async function * asyncFolderWalker (dirs, opts) {
     statFilter,
     maxDepth: Infinity,
     shaper
-  }, opts);
+  }, opts)
 
-  const roots = [dirs].flat().filter(opts.pathFilter);
-  const pending = [];
+  const roots = [dirs].flat().filter(opts.pathFilter)
+  const pending = []
 
   while (roots.length) {
-    const root = roots.shift();
-    pending.push(root);
+    const root = roots.shift()
+    pending.push(root)
 
     while (pending.length) {
-      const current = pending.shift();
-      if (typeof current === 'undefined') continue;
-      const st = await lstat(current);
+      const current = pending.shift()
+      if (typeof current === 'undefined') continue
+      const st = await lstat(current)
       if ((!st.isDirectory() || depthLimiter(current, root, opts.maxDepth)) && opts.statFilter(st)) {
-        yield opts.shaper(fwShape(root, current, st));
-        continue;
+        yield opts.shaper(fwShape(root, current, st))
+        continue
       }
 
-      const files = await readdir(current);
-      files.sort();
+      const files = await readdir(current)
+      files.sort()
 
       for (const file of files) {
-        var next = path.join(current, file);
-        if (opts.pathFilter(next)) pending.unshift(next);
+        var next = path.join(current, file)
+        if (opts.pathFilter(next)) pending.unshift(next)
       }
-      if (current === root || !opts.statFilter(st)) continue;
-      else yield opts.shaper(fwShape(root, current, st));
+      if (current === root || !opts.statFilter(st)) continue
+      else yield opts.shaper(fwShape(root, current, st))
     }
   }
 }
@@ -119,7 +119,7 @@ function fwShape (root, name, st) {
     stat: st,
     relname: root === name ? path.basename(name) : path.relative(root, name),
     basename: path.basename(name)
-  };
+  }
 }
 
 /**
@@ -134,10 +134,10 @@ function fwShape (root, name, st) {
  * @returns {Boolean} - Return true to signal stop descending.
  */
 function depthLimiter (filePath, relativeTo, maxDepth) {
-  if (maxDepth === Infinity) return false;
-  const rootDepth = relativeTo.split(path.sep).length;
-  const fileDepth = filePath.split(path.sep).length;
-  return fileDepth - rootDepth > maxDepth;
+  if (maxDepth === Infinity) return false
+  const rootDepth = relativeTo.split(path.sep).length
+  const fileDepth = filePath.split(path.sep).length
+  return fileDepth - rootDepth > maxDepth
 }
 
 /**
@@ -148,13 +148,13 @@ function depthLimiter (filePath, relativeTo, maxDepth) {
  * @private
  */
 async function all (iterator) {
-  const collect = [];
+  const collect = []
 
   for await (const result of iterator) {
-    collect.push(result);
+    collect.push(result)
   }
 
-  return collect;
+  return collect
 }
 
 /**
@@ -169,11 +169,11 @@ async function all (iterator) {
  * @returns {Promise<String[]|any>} - An async iterator that returns anything.
  */
 async function allFiles (...args) {
-  return all(asyncFolderWalker(...args));
+  return all(asyncFolderWalker(...args))
 }
 
 module.exports = {
   asyncFolderWalker,
   allFiles,
   all
-};
+}
