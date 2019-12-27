@@ -89,7 +89,7 @@ The `shaper` function lets you change the shape of the returned value based on d
 }
 ````
 
-Example of a fwData object:
+Example of a fwData object for a directory:
 
 ```js
 {
@@ -117,6 +117,37 @@ Example of a fwData object:
   },
   relname: 'sub-folder/sub-sub-folder',
   basename: 'sub-sub-folder'
+}
+```
+
+and another example for a file on windows:
+
+```js
+{
+  root: 'D:\\a\\async-folder-walker\\async-folder-walker\\fixtures',
+  filepath: 'D:\\a\\async-folder-walker\\async-folder-walker\\fixtures\\sub-folder\\sub-sub-folder\\sub-sub-folder-file.json',
+  stat: Stats {
+    dev: 1321874112,
+    mode: 33206,
+    nlink: 1,
+    uid: 0,
+    gid: 0,
+    rdev: 0,
+    blksize: 4096,
+    ino: 562949953421580,
+    size: 37,
+    blocks: 0,
+    atimeMs: 1577476819530.035,
+    mtimeMs: 1577476819530.035,
+    ctimeMs: 1577476819530.035,
+    birthtimeMs: 1577476819530.035,
+    atime: 2019-12-27T20:00:19.530Z,
+    mtime: 2019-12-27T20:00:19.530Z,
+    ctime: 2019-12-27T20:00:19.530Z,
+    birthtime: 2019-12-27T20:00:19.530Z
+  },
+  relname: 'sub-folder\\sub-sub-folder\\sub-sub-folder-file.json',
+  basename: 'sub-sub-folder-file.json'
 }
 ```
 
