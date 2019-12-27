@@ -157,7 +157,7 @@ The `stat` property is an instance of [fs.Stats](https://nodejs.org/api/fs.html#
 
 Get an Array of all files inside of a directory.  `paths` can be a single string path or an array of string paths.
 
-`opts` Is the same as `asyncFolderWalker`.
+`opts` Is the same as [`asyncFolderWalker`](#async-gen--asyncfolderwalkerpaths-opts).
 
 ## See also
 
