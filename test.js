@@ -1,8 +1,8 @@
-import tape from 'tape';
-import ptape from 'tape-promise';
-import { asyncFolderWalker, allFiles } from './main';
-import path from 'path';
-import tmp from 'p-temporary-directory';
+const tape = require('tape');
+const ptape = require('tape-promise').default;
+const { asyncFolderWalker, allFiles } = require('.');
+const path = require('path');
+const tmp = require('p-temporary-directory');
 const test = ptape(tape);
 
 const fixtures = path.join(__dirname, 'fixtures');

@@ -1,6 +1,5 @@
 # async-folder-walker
 [![Actions Status](https://github.com/bcomnes/async-folder-walker/workflows/tests/badge.svg)](https://github.com/bcomnes/async-folder-walker/actions)
-[![Exports](https://img.shields.io/badge/exports-esm-blue)](https://github.com/standard-things/esm)
 
 A recursive async iterator of the files and directories in a given folder. Can take multiple folders, limit walk depth and filter based on path names and stat results.
 
@@ -11,7 +10,7 @@ npm install async-folder-walker
 ## Usage
 
 ``` js
-import { asyncFolderWalker, allFiles } from 'async-folder-walker';
+const { asyncFolderWalker, allFiles } = require('async-folder-walker');
 
 async function iterateFiles () {
   const walker = asyncFolderWalker(['.git', 'node_modules']);
@@ -41,7 +40,7 @@ Return an async generator that will iterate over all of files inside of a direct
 You can iterate over each file and directory individually using a `for-await...of` loop.  Note, you must be inside an [async function statement](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function).
 
 ```js
-import { asyncFolderWalker } from 'async-folder-walker';
+const { asyncFolderWalker } = require('async-folder-walker');
 async function iterateFiles () {
   const walker = asyncFolderWalker(['.git', 'node_modules']);
   for await (const file of walker) {

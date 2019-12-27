@@ -3,7 +3,6 @@
   "description": "WIP - nothing to see here",
   "version": "1.0.0",
   "main": "index.js",
-  "module": "main.js",
   "author": "Bret Comnes <bcomnes@gmail.com> (https://bret.io)",
   "bugs": {
     "url": "https://github.com/bcomnes/async-folder-walker/issues"
@@ -11,7 +10,6 @@
   "dependencies": {},
   "devDependencies": {
     "dependency-check": "^4.1.0",
-    "esm": "^3.2.25",
     "npm-run-all": "^4.1.5",
     "p-temporary-directory": "^1.1.1",
     "semistandard": "^14.2.0",
@@ -29,7 +27,7 @@
     "test": "run-s test:*",
     "test:deps": "dependency-check . --no-dev --no-peer",
     "test:semistandard": "semistandard",
-    "test:tape": "tape -r esm test.js",
+    "test:tape": "tape test.js",
     "debug": "node --nolazy --inspect-brk=9229 -r esm test.js"
   },
   "semistandard": {
