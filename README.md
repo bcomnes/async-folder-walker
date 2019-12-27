@@ -5,6 +5,8 @@ A recursive async iterator of the files and directories in a given folder. Can t
 
 ![](https://repository-images.githubusercontent.com/223294839/43cf9600-0d3f-11ea-858e-81b08a14509f)
 
+## Installation
+
 ```
 npm install async-folder-walker
 ```
