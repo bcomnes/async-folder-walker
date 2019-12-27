@@ -22,7 +22,7 @@ tap.test('Array from async iterator', async t => {
   t.equal(files.length, 4, 'expected number of files are found')
 })
 
-tap.skip('Shape example', async t => {
+tap.test('Shape example', async t => {
   await allFiles([fixtures], {
     shaper: fwData => {
       console.log(fwData)
