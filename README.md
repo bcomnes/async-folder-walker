@@ -62,6 +62,7 @@ Opts include:
   fs: require('fs'),
   pathFilter: filepath => true,
   statFilter st => true,
+  ignore: [],
   maxDepth: Infinity,
   shaper: ({ root, filepath, stat, relname, basename }) => filepath
 }
@@ -80,6 +81,14 @@ The `statFilter` function allows you to filter files based on the internal stat 
 ```js
 { // exclude all directories:
   statFilter: st => !st.isDirectory()
+}
+```
+
+The `ignore` option can be a string or or array of strings that should follow gitignore style ignore strings. Files and directories that match are ignored.
+
+```js
+{ // Ignore node_modules at any depth and any file starting with a .
+  ['node_modules', '.*']
 }
 ```
 
