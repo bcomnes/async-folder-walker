@@ -69,7 +69,7 @@ tap.test('pathFilter works', async t => {
     pathFilter: p => !p.includes(filterStrig)
   })
 
-  t.false(files.some(f => f.includes(filterStrig)), 'No paths include the excluded string')
+  t.notOk(files.some(f => f.includes(filterStrig)), 'No paths include the excluded string')
 })
 
 tap.test('statFilter works', async t => {
@@ -79,7 +79,7 @@ tap.test('statFilter works', async t => {
   })
 
   for (const st of stats) {
-    t.false(st.isDirectory(), 'none of the files are directories')
+    t.notOk(st.isDirectory(), 'none of the files are directories')
   }
 })
 

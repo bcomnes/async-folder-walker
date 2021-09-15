@@ -92,7 +92,7 @@ async function * asyncFolderWalker (dirs, opts) {
       files.sort()
 
       for (const file of files) {
-        var next = path.join(current, file)
+        const next = path.join(current, file)
         if (opts.pathFilter(next)) pending.unshift(next)
       }
       if (current === root || !opts.statFilter(st)) continue
