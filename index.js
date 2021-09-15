@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const ignore = require('ignore')
 
 const { readdir, lstat } = fs.promises
 
@@ -19,7 +20,7 @@ const pathFilter = filepath => true
  *
  * @return {Boolean} Return false to filter the given `filepath` and true to include it.
  */
-const statFilter = filepath => true
+const statFilter = st => true
 
 /**
  * FWStats is the object that the okdistribute/folder-walker module returns by default.
@@ -68,9 +69,12 @@ async function * asyncFolderWalker (dirs, opts) {
     fs,
     pathFilter,
     statFilter,
+    ignore,
     maxDepth: Infinity,
     shaper
   }, opts)
+
+  const ig = ignore().add(opts.ignore)
 
   const roots = [dirs].flat().filter(opts.pathFilter)
   const pending = []
@@ -78,11 +82,12 @@ async function * asyncFolderWalker (dirs, opts) {
   while (roots.length) {
     const root = roots.shift()
     pending.push(root)
-
     while (pending.length) {
       const current = pending.shift()
       if (typeof current === 'undefined') continue
       const st = await lstat(current)
+      const rel = relname(root, current)
+      if (ig.ignores(st.isDirectory() ? rel + '/' : rel)) continue
       if ((!st.isDirectory() || depthLimiter(current, root, opts.maxDepth)) && opts.statFilter(st)) {
         yield opts.shaper(fwShape(root, current, st))
         continue
@@ -101,6 +106,10 @@ async function * asyncFolderWalker (dirs, opts) {
   }
 }
 
+function relname (root, name) {
+  return root === name ? path.basename(name) : path.relative(root, name)
+}
+
 /**
  * Generates the same shape as the folder-walker module.
  *
@@ -117,7 +126,7 @@ function fwShape (root, name, st) {
     root: root,
     filepath: name,
     stat: st,
-    relname: root === name ? path.basename(name) : path.relative(root, name),
+    relname: relname(root, name),
     basename: path.basename(name)
   }
 }
