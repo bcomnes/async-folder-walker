@@ -16,7 +16,7 @@
     "p-temporary-directory": "^1.1.1",
     "gh-release": "^6.0.0",
     "standard": "^16.0.3",
-    "tap": "^15.0.1",
+    "tap": "^16.0.0",
     "auto-changelog": "^2.2.0"
   },
   "homepage": "https://github.com/bcomnes/async-folder-walker",
