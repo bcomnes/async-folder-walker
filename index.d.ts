@@ -11,6 +11,10 @@ export type Opts = {
      */
     statFilter?: statFilter | undefined;
     /**
+     * - An array of .gitignore style strings of files to ignore.
+     */
+    ignore?: string[] | undefined;
+    /**
      * - The maximum number of folders to walk down into.
      */
     maxDepth?: number | undefined;
@@ -62,6 +66,7 @@ export type shaper = (fwStats: FWStats) => any;
  * @typedef Opts
  * @property {pathFilter} [pathFilter] - A pathFilter cb.
  * @property {statFilter} [statFilter] - A statFilter cb.
+ * @property {String[]} [ignore] - An array of .gitignore style strings of files to ignore.
  * @property {Number} [maxDepth=Infinity] - The maximum number of folders to walk down into.
  * @property {shaper} [shaper] - A shaper cb.
  */
