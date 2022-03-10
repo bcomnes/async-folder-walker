@@ -1,3 +1,7 @@
+// @ts-check
+
+'use strict'
+
 const fs = require('fs')
 const path = require('path')
 const ignore = require('ignore')
@@ -74,6 +78,7 @@ async function * asyncFolderWalker (dirs, opts) {
     shaper
   }, opts)
 
+  // @ts-ignore
   const ig = ignore().add(opts.ignore)
 
   const roots = [dirs].flat().filter(opts.pathFilter)
@@ -155,10 +160,12 @@ function depthLimiter (filePath, relativeTo, maxDepth) {
  * @async
  * @function
  * @private
+ * @param {AsyncIterator} iterator - The iterator to collect into an array
  */
 async function all (iterator) {
   const collect = []
 
+  // @ts-ignore
   for await (const result of iterator) {
     collect.push(result)
   }
@@ -177,8 +184,8 @@ async function all (iterator) {
  *
  * @returns {Promise<String[]|any>} - An async iterator that returns anything.
  */
-async function allFiles (...args) {
-  return all(asyncFolderWalker(...args))
+async function allFiles (dirs, opts) {
+  return all(asyncFolderWalker(dirs, opts))
 }
 
 module.exports = {

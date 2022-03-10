@@ -44,15 +44,15 @@ Return an async generator that will iterate over all of files inside of a direct
 You can iterate over each file and directory individually using a `for-await...of` loop.  Note, you must be inside an [async function statement](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function).
 
 ```js
-const { asyncFolderWalker } = require('async-folder-walker');
+const { asyncFolderWalker } = require('async-folder-walker')
 async function iterateFiles () {
-  const walker = asyncFolderWalker(['.git', 'node_modules']);
+  const walker = asyncFolderWalker(['.git', 'node_modules'])
   for await (const file of walker) {
-    console.log(file); // logs the file path!
+    console.log(file) // logs the file path!
   }
 }
 
-iterateFiles();
+iterateFiles()
 ```
 
 Opts include:

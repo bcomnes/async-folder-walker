@@ -11,13 +11,15 @@
     "ignore": "^5.1.8"
   },
   "devDependencies": {
+    "auto-changelog": "^2.2.0",
     "dependency-check": "^4.1.0",
+    "gh-release": "^6.0.0",
     "npm-run-all2": "^5.0.0",
     "p-temporary-directory": "^1.1.1",
-    "gh-release": "^6.0.0",
     "standard": "^16.0.3",
     "tap": "^16.0.0",
-    "auto-changelog": "^2.2.0"
+    "typescript": "^4.6.2",
+    "@voxpelli/tsconfig": "^2.0.0"
   },
   "homepage": "https://github.com/bcomnes/async-folder-walker",
   "keywords": [],
@@ -33,7 +35,8 @@
     "test:standard": "standard",
     "test:tap": "tap",
     "debug": "node --nolazy --inspect-brk=9229 -r esm test.js",
-    "version": "auto-changelog -p --template keepachangelog auto-changelog --breaking-pattern 'BREAKING CHANGE:' && git add CHANGELOG.md"
+    "build": "rm -f index.d.ts && tsc -p declaration.tsconfig.json",
+    "version": "git diff --exit-code -- index.d.ts && auto-changelog -p --template keepachangelog auto-changelog --breaking-pattern 'BREAKING CHANGE:' && git add CHANGELOG.md"
   },
   "standard": {
     "ignore": [

@@ -1,0 +1,9 @@
+{
+  "extends": "@voxpelli/tsconfig/node16.json",
+  "files": [
+    "index.js"
+  ],
+  "include": [
+    "test.js"
+  ]
+}
