@@ -18,7 +18,7 @@
     "p-temporary-directory": "^1.1.1",
     "standard": "^17.0.0",
     "tap": "^16.0.0",
-    "typescript": "^4.6.2",
+    "typescript": "^5.0.3",
     "@voxpelli/tsconfig": "^6.0.0"
   },
   "homepage": "https://github.com/bcomnes/async-folder-walker",
