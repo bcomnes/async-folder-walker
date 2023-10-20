@@ -1,7 +1,7 @@
 {
   "name": "async-folder-walker",
   "description": "An async iterator for walking directories, with helpful options",
-  "version": "2.2.1",
+  "version": "3.0.0",
   "main": "index.js",
   "types": "index.d.ts",
   "author": "Bret Comnes <bcomnes@gmail.com> (https://bret.io)",
