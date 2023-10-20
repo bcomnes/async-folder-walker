@@ -33,13 +33,14 @@
     "url": "https://github.com/bcomnes/async-folder-walker.git"
   },
   "scripts": {
-    "prepublishOnly": "git push --follow-tags && gh-release -y",
+    "prepublishOnly": "npm run build && git push --follow-tags && gh-release -y",
+    "postpublish": "npm run clean",
     "test": "npm run clean && run-s test:*",
     "test:standard": "standard",
     "test:tap": "tap",
     "test:tsc": "tsc",
     "debug": "node --nolazy --inspect-brk=9229 -r esm test.js",
-    "version": "run-s build version:*",
+    "version": "run-s version:*",
     "version:changelog": "auto-changelog -p --template keepachangelog auto-changelog --breaking-pattern 'BREAKING CHANGE:'",
     "version:git": "git add CHANGELOG.md",
     "postversion": "npm run clean",
