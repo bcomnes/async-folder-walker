@@ -1,5 +1,9 @@
 // @ts-check
 
+/**
+ * @typedef {import('fs').Stats} Stats
+ */
+
 'use strict'
 
 const fs = require('fs')
@@ -9,93 +13,108 @@ const ignore = require('ignore')
 const { readdir, lstat } = fs.promises
 
 /**
- * pathFilter lets you filter files based on a resolved `filepath`.
- * @callback pathFilter
- * @param {String} filepath - The resolved `filepath` of the file to test for filtering.
+ * PathFilter lets you filter files based on a resolved `filepath`.
+ * @callback PathFilter
+ * @param {string} filepath - The resolved `filepath` of the file to test for filtering.
  *
- * @return {Boolean} Return false to filter the given `filepath` and true to include it.
+ * @return {boolean} Return false to filter the given `filepath` and true to include it.
  */
-const pathFilter = filepath => true
+
+/**
+ * @type PathFilter
+ */
+const pathFilter = (/* filepath */) => true
 
 /**
  * statFilter lets you filter files based on a lstat object.
- * @callback statFilter
- * @param {Object} st - A fs.Stats instance.
+ * @callback StatFilter
+ * @param {Stats} st - A fs.Stats instance.
  *
- * @return {Boolean} Return false to filter the given `filepath` and true to include it.
+ * @return {boolean} Return false to filter the given `filepath` and true to include it.
  */
-const statFilter = st => true
+
+/**
+ * @type StatFilter
+ */
+const statFilter = (/* st */) => true
 
 /**
  * FWStats is the object that the okdistribute/folder-walker module returns by default.
  *
  * @typedef FWStats
- * @property {String} root - The filepath of the directory where the walk started.
- * @property {String} filepath - The resolved filepath.
- * @property {Object} stat - A fs.Stats instance.
- * @property {String} relname - The relative path to `root`.
- * @property {String} basename - The resolved filepath of the files containing directory.
+ * @property {string} root - The filepath of the directory where the walk started.
+ * @property {string} filepath - The resolved assolute path.
+ * @property {Stats} stat - A fs.Stats instance.
+ * @property {string} relname - The relative path to `root`.
+ * @property {string} basename - The resolved filepath of the files containing directory.
  */
 
 /**
- * shaper lets you change the shape of the returned file data from walk-time stats.
- * @callback shaper
+ * Shaper lets you change the shape of the returned file data from walk-time stats.
+ * @template T
+ * @callback Shaper
  * @param {FWStats} fwStats - The same status object returned from folder-walker.
  *
- * @return {*} - Whatever you want returned from the directory walk.
+ * @return {T} - Whatever you want returned from the directory walk.
  */
-const shaper = ({ root, filepath, stat, relname, basename }) => filepath
 
 /**
- * Options object
+ * @type {Shaper<string>}
+ */
+const shaper = ({ filepath/*, root, stat, relname, basename */ }) => filepath
+
+/**
+ * Options object.
  *
- * @typedef Opts
- * @property {pathFilter} [pathFilter] - A pathFilter cb.
- * @property {statFilter} [statFilter] - A statFilter cb.
- * @property {String[]} [ignore] - An array of .gitignore style strings of files to ignore.
- * @property {Number} [maxDepth=Infinity] - The maximum number of folders to walk down into.
- * @property {shaper} [shaper] - A shaper cb.
+ * @template T
+ * @typedef {object} AFWOpts
+ * @property {PathFilter} pathFilter=pathFilter - A pathFilter callback.
+ * @property {StatFilter} statFilter=statFilter - A statFilter callback.
+ * @property {string[]} ignore=[] - An array of .gitignore style strings of files to ignore.
+ * @property {number} maxDepth=Infinity - The maximum number of folders to walk down into.
+ * @property {Shaper<T>} shaper=shaper - A shaper callback.
  */
 
 /**
  * Create an async generator that iterates over all folders and directories inside of `dirs`.
  *
- * @async
- * @generator
- * @function
+ * @template T
  * @public
- * @param {String|String[]} dirs - The path of the directory to walk, or an array of directory paths.
- * @param {?(Opts)} opts - Options used for the directory walk.
- *
- * @yields {Promise<String|any>} - An async iterator that returns anything.
+ * @param {string|string[]} dirs - The path or paths of the directory to walk.
+ * @param {?Partial<AFWOpts<T>>} [opts] - Options used for the directory walk.
+ * @yields {T} - An iterator that returns a value of type T.
  */
 async function * asyncFolderWalker (dirs, opts) {
-  opts = Object.assign({
+  /** @type {AFWOpts<T>} */
+  const resolvedOpts = Object.assign({
     fs,
     pathFilter,
     statFilter,
-    ignore,
+    ignore: [],
     maxDepth: Infinity,
     shaper
   }, opts)
 
   // @ts-ignore
-  const ig = ignore().add(opts.ignore)
+  const ig = ignore().add(resolvedOpts.ignore)
 
-  const roots = [dirs].flat().filter(opts.pathFilter)
+  const roots = [dirs].flat().filter(resolvedOpts.pathFilter)
   const pending = []
 
   while (roots.length) {
     const root = roots.shift()
+    if (!root) continue // Handle potential undefined value
     pending.push(root)
+
     while (pending.length) {
       const current = pending.shift()
-      if (typeof current === 'undefined') continue
+      if (!current) continue // Handle potential undefined value
+
       const st = await lstat(current)
       const rel = relname(root, current)
       if (ig.ignores(st.isDirectory() ? rel + '/' : rel)) continue
-      if ((!st.isDirectory() || depthLimiter(current, root, opts.maxDepth)) && opts.statFilter(st)) {
-        yield opts.shaper(fwShape(root, current, st))
+      if ((!st.isDirectory() || depthLimiter(current, root, resolvedOpts.maxDepth)) && resolvedOpts.statFilter(st)) {
+        yield resolvedOpts.shaper(fwShape(root, current, st))
         continue
       }
 
@@ -104,14 +123,19 @@ async function * asyncFolderWalker (dirs, opts) {
 
       for (const file of files) {
         const next = path.join(current, file)
-        if (opts.pathFilter(next)) pending.unshift(next)
+        if (resolvedOpts.pathFilter(next)) pending.unshift(next)
       }
-      if (current === root || !opts.statFilter(st)) continue
-      else yield opts.shaper(fwShape(root, current, st))
+      if (current === root || !resolvedOpts.statFilter(st)) continue
+      else yield resolvedOpts.shaper(fwShape(root, current, st))
     }
   }
 }
 
+/**
+ * @param  {string} root
+ * @param  {string} name
+ * @return {string}      The basename or relative name if root === name
+ */
 function relname (root, name) {
   return root === name ? path.basename(name) : path.relative(root, name)
 }
@@ -119,17 +143,14 @@ function relname (root, name) {
 /**
  * Generates the same shape as the folder-walker module.
  *
- * @function
- * @private
- * @param {String} root - Root filepath.
- * @param {String} name - Target filepath.
- * @param {Object} st - fs.Stat object.
- *
- * @return {FWStats} - Folder walker object.
+ * @param {string} root - Root filepath.
+ * @param {string} name - Target filepath.
+ * @param {Stats} st - fs.Stat object.
+ * @returns {FWStats} Folder walker object.
  */
 function fwShape (root, name, st) {
   return {
-    root: root,
+    root,
     filepath: name,
     stat: st,
     relname: relname(root, name),
@@ -140,13 +161,10 @@ function fwShape (root, name, st) {
 /**
  * Test if we are at maximum directory depth.
  *
- * @private
- * @function
- * @param {String} filePath - The resolved path of the target fille.
- * @param {String} relativeTo - The root directory of the current walk.
- * @param {Number} maxDepth - The maximum number of folders to descend into.
- *
- * @returns {Boolean} - Return true to signal stop descending.
+ * @param {string} filePath - The resolved path of the target file.
+ * @param {string} relativeTo - The root directory of the current walk.
+ * @param {number} maxDepth - The maximum number of folders to descend into.
+ * @returns {boolean} Return true to signal stop descending.
  */
 function depthLimiter (filePath, relativeTo, maxDepth) {
   if (maxDepth === Infinity) return false
@@ -156,17 +174,16 @@ function depthLimiter (filePath, relativeTo, maxDepth) {
 }
 
 /**
- * Async iterable collector
+ * Async iterable collector.
  *
- * @async
- * @function
- * @private
- * @param {AsyncIterator} iterator - The iterator to collect into an array
+ * @template T
+ * @public
+ * @param {AsyncIterableIterator<T>} iterator - The iterator to collect into an array.
+ * @returns {Promise<T[]>} Array of items collected from the iterator.
  */
 async function all (iterator) {
   const collect = []
 
-  // @ts-ignore
   for await (const result of iterator) {
     collect.push(result)
   }
@@ -175,15 +192,13 @@ async function all (iterator) {
 }
 
 /**
- * allFiles gives you all files from the directory walk as an array.
+ * Gives you all files from the directory walk as an array.
  *
- * @async
- * @function
+ * @template T
  * @public
- * @param {String|String[]} dirs - The path of the directory to walk, or an array of directory paths.
- * @param {?(Opts)} opts - Options used for the directory walk.
- *
- * @returns {Promise<String[]|any>} - An async iterator that returns anything.
+ * @param {string|string[]} dirs - The path of the directory to walk, or an array of directory paths.
+ * @param {Partial<AFWOpts<T>>} [opts] - Options used for the directory walk.
+ * @returns {Promise<T[]>} Array of files or any other result from the directory walk.
  */
 async function allFiles (dirs, opts) {
   return all(asyncFolderWalker(dirs, opts))

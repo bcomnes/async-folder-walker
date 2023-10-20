@@ -1,8 +1,9 @@
 {
   "name": "async-folder-walker",
-  "description": "WIP - nothing to see here",
+  "description": "An async iterator for walking directories, with helpful options",
   "version": "2.2.1",
   "main": "index.js",
+  "types": "index.d.ts",
   "author": "Bret Comnes <bcomnes@gmail.com> (https://bret.io)",
   "bugs": {
     "url": "https://github.com/bcomnes/async-folder-walker/issues"
@@ -11,15 +12,18 @@
     "ignore": "^5.1.8"
   },
   "devDependencies": {
+    "@tsconfig/recommended": "^1.0.3",
+    "@types/node": "^20.8.4",
     "auto-changelog": "^2.2.0",
-    "dependency-check": "^4.1.0",
     "gh-release": "^7.0.0",
     "npm-run-all2": "^6.0.0",
     "p-temporary-directory": "^2.0.1",
     "standard": "^17.0.0",
     "tap": "^18.4.0",
-    "typescript": "^4.6.2",
-    "@voxpelli/tsconfig": "^6.0.0"
+    "typescript": "~5.2.2"
+  },
+  "peerDependencies": {
+    "@types/node": "*"
   },
   "homepage": "https://github.com/bcomnes/async-folder-walker",
   "keywords": [],
@@ -30,17 +34,40 @@
   },
   "scripts": {
     "prepublishOnly": "git push --follow-tags && gh-release -y",
-    "test": "run-s test:*",
-    "test:deps": "dependency-check . --no-dev --no-peer",
+    "test": "npm run clean && run-s test:*",
     "test:standard": "standard",
     "test:tap": "tap",
+    "test:tsc": "tsc",
     "debug": "node --nolazy --inspect-brk=9229 -r esm test.js",
-    "build": "rm -f index.d.ts && tsc -p declaration.tsconfig.json",
-    "version": "git diff --exit-code -- index.d.ts && auto-changelog -p --template keepachangelog auto-changelog --breaking-pattern 'BREAKING CHANGE:' && git add CHANGELOG.md"
+    "version": "run-s build version:*",
+    "version:changelog": "auto-changelog -p --template keepachangelog auto-changelog --breaking-pattern 'BREAKING CHANGE:'",
+    "version:git": "git add CHANGELOG.md",
+    "postversion": "npm run clean",
+    "clean": "run-p clean:*",
+    "clean:declarations": "rm -rf $(find . -maxdepth 1 -type f -name '*.d.ts*')",
+    "build": "npm run clean && run-p build:*",
+    "build:declaration": "tsc -p declaration.tsconfig.json"
   },
+  "files": [
+    "/index.js",
+    "/index.d.ts",
+    "/index.d.ts.map"
+  ],
   "standard": {
     "ignore": [
       "dist"
+    ]
+  },
+  "tap": {
+    "serial": [
+      "test",
+      "routes"
+    ],
+    "typecheck": false,
+    "allow-incomplete-coverage": true,
+    "coverage-report": [
+      "text",
+      "lcovonly"
     ]
   }
 }

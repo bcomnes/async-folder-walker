@@ -1,6 +1,7 @@
 const tap = require('tap')
 const { asyncFolderWalker, allFiles } = require('.')
 const path = require('path')
+// @ts-ignore
 const tmp = require('p-temporary-directory')
 
 const fixtures = path.join(__dirname, 'fixtures')
@@ -23,8 +24,9 @@ tap.test('Array from async iterator', async t => {
 })
 
 tap.test('No args', async t => {
+  // @ts-ignore
   for await (const file of asyncFolderWalker()) {
-    t.fail(file, 'no files should be found!')
+    t.fail('no files should be found!', file)
   }
   t.pass('for of executed')
 })
@@ -33,7 +35,7 @@ tap.test('No folders', async t => {
   const [dir, cleanup] = await tmp()
   try {
     for await (const file of asyncFolderWalker(dir)) {
-      t.fail(file, 'no files should be found!')
+      t.fail('no files should be found!', file)
     }
     t.pass('for of executed')
   } finally {
@@ -65,7 +67,7 @@ tap.test('pathFilter works', async t => {
 tap.test('statFilter works', async t => {
   const stats = await allFiles(fixtures, {
     statFilter: st => !st.isDirectory(), // Exclude files
-    shaper: ({ root, filepath, stat, relname, basename }) => stat // Lets get the stats instead of paths
+    shaper: ({ stat /*, root, filepath, relname, basename */ }) => stat // Lets get the stats instead of paths
   })
 
   for (const st of stats) {

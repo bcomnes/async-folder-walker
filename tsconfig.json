@@ -1,9 +1,26 @@
 {
-  "extends": "@voxpelli/tsconfig/node16.json",
+  "extends": "@tsconfig/node20/tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": false,
+    "removeComments": false,
+    "stripInternal": true,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "forceConsistentCasingInFileNames": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  },
   "files": [
     "index.js"
   ],
-  "include": [
-    "test.js"
+  "exclude": [
+    "node_modules"
   ]
 }
