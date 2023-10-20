@@ -60,11 +60,8 @@
     ]
   },
   "tap": {
-    "serial": [
-      "test",
-      "routes"
-    ],
-    "typecheck": false,
+    "serial": [],
+    "typecheck": true,
     "allow-incomplete-coverage": true,
     "coverage-report": [
       "text",
