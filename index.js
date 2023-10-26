@@ -64,6 +64,13 @@ const statFilter = (/* st */) => true
 const shaper = ({ filepath/*, root, stat, relname, basename */ }) => filepath
 
 /**
+  * AFWReturnType will return the return type of AFW for your given shaper.
+  *
+  * @template T
+  * @typedef {T extends AsyncGenerator<infer U, any, any> ? U : never} AFWReturnType
+  */
+
+/**
  * Options object.
  *
  * @template T
