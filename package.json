@@ -49,11 +49,6 @@
     "build": "npm run clean && run-p build:*",
     "build:declaration": "tsc -p declaration.tsconfig.json"
   },
-  "files": [
-    "/index.js",
-    "/index.d.ts",
-    "/index.d.ts.map"
-  ],
   "standard": {
     "ignore": [
       "dist"
