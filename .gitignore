@@ -2,7 +2,9 @@ node_modules
 sandbox.js
 .nyc_output
 .tap
+.nova
 
 # Generated types
 *.d.ts
 *.d.ts.map
+
