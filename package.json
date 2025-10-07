@@ -16,7 +16,7 @@
     "@types/node": "^20.8.4",
     "auto-changelog": "^2.2.0",
     "gh-release": "^7.0.0",
-    "npm-run-all2": "^6.0.0",
+    "npm-run-all2": "^8.0.4",
     "p-temporary-directory": "^2.0.1",
     "standard": "^17.0.0",
     "tap": "^21.1.1",
