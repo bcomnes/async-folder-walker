@@ -1,7 +1,7 @@
 // @ts-check
 
 /**
- * @typedef {import('fs').Stats} Stats
+ * @import { Stats } from 'node:fs'
  */
 
 'use strict'
@@ -105,7 +105,9 @@ async function * asyncFolderWalker (dirs, opts) {
   // @ts-ignore
   const ig = ignore().add(resolvedOpts.ignore)
 
+  /** @type {string[]} */
   const roots = [dirs].flat().filter(resolvedOpts.pathFilter)
+  /** @type {string[]} */
   const pending = []
 
   while (roots.length) {
